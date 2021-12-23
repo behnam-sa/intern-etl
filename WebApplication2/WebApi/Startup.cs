@@ -33,11 +33,9 @@ namespace WebApi
                 options.AddPolicy(MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:1433",
-                                "http://localhost:4200", "http://localhost:5000", "https://localhost:5001"
-                            )
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
+                        builder.AllowAnyOrigin()
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
                     });
             });
 

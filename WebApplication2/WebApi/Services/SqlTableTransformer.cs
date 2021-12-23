@@ -29,7 +29,7 @@ namespace WebApi.Services
 
         private void AddTableRows(int lowerBound, int upperBound, DataTable table, SimpleTable simpleDataTable)
         {
-            for (var i = lowerBound; i < upperBound; i++)
+            for (var i = lowerBound; i < upperBound && i < table.Rows.Count; i++)
             {
                 var row = new Row(table.Rows[i].ItemArray.Select(s => s != null ? s.ToString() : ""));
                 simpleDataTable.AddRow(row);

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text.Json;
 using WebApi.Services.QueryServices;
 using WebApi.Services.Sql;
@@ -61,7 +62,7 @@ namespace WebApi.Services.QueryServices
 
             if (aggregation == null) return "";
 
-            return $"SELECT {aggregation.GetAggregateOperationSqlCommands()} INTO {destinationDatasetName}" +
+            return $"SELECT {string.Join(",", aggregation.GetGroupBySqlCommands(), aggregation.GetAggregateOperationSqlCommands())} INTO {destinationDatasetName}" +
                    $" FROM {startingDatasetName} GROUP BY {aggregation.GetGroupBySqlCommands()}";
         }
     }

@@ -145,7 +145,7 @@ namespace WebApi.Services
                 i++; 
                 if (i++ > 100) break;
                 var row = streamReader.ReadLine()?.Split(_csvProp.FieldTerminator);
-                if (row != null) column.Add(row[columnNumber]);
+                if (row != null && columnNumber < row.Length) column.Add(row[columnNumber]);
             }
 
             if (_csvProp.DoesHaveHeader) column.RemoveAt(0);

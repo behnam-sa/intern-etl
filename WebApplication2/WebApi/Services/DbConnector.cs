@@ -4,7 +4,7 @@ namespace WebApi.Services
 {
     public class DbConnector : ISqlConnector
     {
-        public static string LocalConnectionString => "Server=localhost;Database=Etl;Trusted_Connection=true";
+        public static string LocalConnectionString => "Server=(localdb)\\mssqllocaldb;Database=ETL1;Trusted_Connection=True;MultipleActiveResultSets=true";
 
         public static string ServerConnectionString =>
             "workstation id=team4DB.mssql.somee.com;packet size=4096;user id=team4_SQLLogin_1;pwd=ke7eltso65;data source=team4DB.mssql.somee.com;persist security info=False;initial catalog=team4DB";

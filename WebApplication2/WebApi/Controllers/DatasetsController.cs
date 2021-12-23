@@ -60,28 +60,21 @@ namespace WebApi.Controllers
         [Route("upload")]
         public IActionResult Upload([FromBody] CsvProp data, [FromHeader] string token)
         {
-            try
+            var user = _userValidator.IsUserValid(token);
+            var dataset = new Dataset()
             {
-                var user = _userValidator.IsUserValid(token);
-                var dataset = new Dataset()
-                {
-                    DatasetName = data.DatasetName, IsLiked = false
-                };
-                var id = 1;
-                if (_database.Datasets.Any())
-                {
-                    id = _database.Datasets.Max(c => c.DatasetId) + 1;
-                }
-                user.UserDatasets.Add(dataset);
-                _database.SaveChanges();
-                var loader = new CsvLoader(data, id);
-                loader.TransportCsvToSql();
-                return Ok(id);
-            }
-            catch (Exception e)
+                DatasetName = data.DatasetName, IsLiked = false
+            };
+            var id = 1;
+            if (_database.Datasets.Any())
             {
-                return Unauthorized(e.Message);
+                id = _database.Datasets.Max(c => c.DatasetId) + 1;
             }
+            user.UserDatasets.Add(dataset);
+            _database.SaveChanges();
+            var loader = new CsvLoader(data, id);
+            loader.TransportCsvToSql();
+            return Ok(id);
         }
 
         [HttpPut]
@@ -207,21 +200,14 @@ namespace WebApi.Controllers
         [Route("{datasetId:int}/preview")]
         public IActionResult Preview([FromRoute]int datasetId , [FromBody] PreviewData data, [FromHeader] string token)
         {
-            try
+            var user = _userValidator.IsUserValid(token);
+            if (!_authorizationValidator.DoesBelongToUser(user.Id, datasetId, UserProp.Dataset))
             {
-                var user = _userValidator.IsUserValid(token);
-                if (!_authorizationValidator.DoesBelongToUser(user.Id, datasetId, UserProp.Dataset))
-                {
-                    return BadRequest("You have No database with this id");
-                }
+                return BadRequest("You have No database with this id");
+            }
 
-                var simpleTable = _sqlTableTransformer.TransferData(datasetId, data.StartingIndex, data.Size);
-                return Ok(simpleTable);
-            }
-            catch (Exception e)
-            {
-                return Unauthorized(e.Message);
-            }
+            var simpleTable = _sqlTableTransformer.TransferData(datasetId, data.StartingIndex, data.Size);
+            return Ok(simpleTable);
         }
     }
 }
