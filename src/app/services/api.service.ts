@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ApiService {
-    DEFAULT_API_URL = 'https://localhost:5001/' as const;
+    DEFAULT_API_URL = 'https://localhost:44331/' as const;
     LOCAL_API_URL = 'http://team4.somee.com/api/' as const;
     HEADERS: { [header: string]: string } = {
         Accept: 'application/json',
